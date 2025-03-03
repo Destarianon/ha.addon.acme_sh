@@ -2,31 +2,33 @@
 
 A Home Assistant add-on that uses ACME.sh to generate certificates.
 
-ACME.sh uses ZeroSSL.com CA by default.  Set `account` to your email address to register a ZeroSSL.com account.
+This addon uses LetsEncrypt by default.
 Specify the `dns.provider` from the supported list at https://github.com/acmesh-official/acme.sh/wiki/dnsapi
 Add environment variables to the `dns.env` list.  No need to add `export`.  NB: Do not use quotes in environment variables.
-The server can be one listed at https://github.com/acmesh-official/acme.sh/wiki/Server (default: `zerossl`)
+The server can be one listed at https://github.com/acmesh-official/acme.sh/wiki/Server (default: `letsencrypt`) or
 
 ## Troubleshooting
-- Add `DEBUG=1` (or `2` or `3`) to `env` for debug output. 
+Enable the debug option to get verbose output
 Certificates will be installed to `/ssl/`
 
-## Config
-```
-account: me@example.com
-server: zerossl
+## Config Example (not functional values)
+```yaml
+email: me@example.com
+server: https://acme.example.com/acme/directory
+server_rootca: |
+  -----BEGIN CERTIFICATE-----
+  WtUqsPZNre3XSCHk+8KBh5WUuOn....
+  -----END CERTIFICATE-----
 domains:
   - my.domain.tld
   - '*.my.domain.tld'
 certfile: fullchain.pem
 keyfile: privkey.pem
-dns:
-  provider: dns_freedns
-  env: 
-    - FREEDNS_User=my_username
-    - FREEDNS_Password=my_password
-    - DEBUG=1
+challenge: http
+keylength: 2048
+valid_to: "+5d"
 ```
+
 ## Automation 
 Setup an automation to run 
 ```yaml
@@ -40,5 +42,5 @@ action:
       addon: 5b07adba_acme_sh
 initial_state: true
 mode: single
-description: Renew SSL Certificates using ZeroSSL
+description: Renew SSL Certificates
 ```
