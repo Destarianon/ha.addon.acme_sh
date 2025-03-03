@@ -33,6 +33,7 @@ if [ "${CHALLENGE}" == "dns" ]; then
 
 elif [ "${CHALLENGE}" == "http" ]; then
     bashio::log.info "Using HTTP challenge"
+    ACME_ARGUMENTS+=("--standalone")
 
 elif [ "${CHALLENGE}" == "tls" ]; then
     bashio::log.info "Using TLS ALPN challenge"
