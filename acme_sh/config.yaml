@@ -16,11 +16,7 @@ init: false
 map:
   - ssl:rw
 options:
-  domains:
-    - null
-  email: null
   server: https://acme-v02.api.letsencrypt.org/directory
-  server_rootca: null
   certfile: fullchain.pem
   keyfile: privkey.pem
   challenge: http
@@ -34,10 +30,9 @@ schema:
   certfile: str
   keyfile: str
   challenge: list(dns|http|tls)
-  keylength: list(2048|3072|4096|ec-256|ec-384|ec-521)
-  valid_to: str?
+  keylength: list(2048|3072|4096|ec-256|ec-384|ec-521)?
   dns:
-    provider: str
+    provider: str?
     env:
-      - str
+      - str?
   debug: bool?
