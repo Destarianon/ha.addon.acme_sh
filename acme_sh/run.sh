@@ -57,10 +57,10 @@ fi
 
 
 # Set server arguments
-if [ -n "$SERVER" ]; then
+if [ -n "$SERVER" ] && [ "$SERVER" != "null"]; then
     bashio::log.info "Using custom acme server: '$SERVER'"
-    ACME_SERVER_ARGUMENTS="--server $SERVER"
-    if [ -n "$SERVER_ROOTCA" ]; then
+    ACME_SERVER_ARGUMENTS="--server \"${SERVER}\""
+    if [ -n "$SERVER_ROOTCA" ] && [ "$SERVER_ROOTCA" != "null" ]; then
         bashio::log.info "Using custom root CA: \n$SERVER_ROOTCA"
         echo "${SERVER_ROOTCA}" > /tmp/root-ca-cert.crt
         ACME_SERVER_ARGUMENTS+=(--ca-bundle "/tmp/root-ca-cert.crt")
@@ -72,14 +72,14 @@ fi
 
 
 # Set custom keylength argument
-if [ -n "$KEYLENGTH" ]; then
+if [ -n "$KEYLENGTH" ] && [ "$KEYLENGTH" != "null" ]; then
     bashio::log.info "Requesting certificate key length of: '$KEYLENGTH'"
     ACME_CERTIFICATE_ARGUMENTS+=(--keylength $KEYLENGTH)
 fi
 
 
 # Set custom expiration date argument
-if [ -n "$VALID_TO" ]; then
+if [ -n "$VALID_TO" ] && [ "$VALID_TO" != "null" ]; then
     bashio::log.info "Requesting certificate expiration date of: '$VALID_TO'"
     ACME_CERTIFICATE_ARGUMENTS+=(--valid-to "$VALID_TO")
 fi

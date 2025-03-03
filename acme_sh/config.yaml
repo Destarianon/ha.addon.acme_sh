@@ -1,5 +1,5 @@
 ---
-version: 3.0.2
+version: 3.0.3
 slug: acme_sh2
 name: ACME.sh Certs
 description: Request certificates using ACME.sh
