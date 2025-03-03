@@ -46,7 +46,7 @@ fi
 
 
 # Set domain arguments
-if [ ${#DOMAINS[@]} -eq 0 ]; then
+if [ -z ${DOMAINS[@]} ]; then
     bashio::log.error "No domains were configured"
     exit 1
 else
