@@ -19,14 +19,14 @@ ACME_CERTIFICATE_ARGUMENTS=()
 
 # Set debug argument
 if bashio::config.true 'debug'; then
-    ACME_ARGUMENTS+=(--debug)
+    ACME_ARGUMENTS+=("--debug")
 fi
 
 
 # Set challenge type
 if [ "${CHALLENGE}" == "dns" ]; then
     bashio::log.info "Using DNS challenge"
-    ACME_ARGUMENTS+=(--dns "$DNS_PROVIDER")
+    ACME_ARGUMENTS+=("--dns" "${DNS_PROVIDER}")
     for env in $DNS_ENVS; do
         export $env
     done
@@ -58,29 +58,29 @@ fi
 # Set server arguments
 if bashio::config.has_value 'server'; then
     bashio::log.info "Using acme server: '$SERVER'"
-    ACME_SERVER_ARGUMENTS="--server \"${SERVER}\""
+    ACME_SERVER_ARGUMENTS+=("--server" "${SERVER}")
     if bashio::config.has_value 'server_rootca'; then
         bashio::log.info "Using custom root CA: \n$SERVER_ROOTCA"
         echo "${SERVER_ROOTCA}" > /tmp/root-ca-cert.crt
-        ACME_SERVER_ARGUMENTS+=(--ca-bundle "/tmp/root-ca-cert.crt")
+        ACME_SERVER_ARGUMENTS+=("--ca-bundle" "/tmp/root-ca-cert.crt")
     fi
 else
     bashio::log.info "Using default letsencrypt server"
-    ACME_SERVER_ARGUMENTS="--server letsencrypt"
+    ACME_SERVER_ARGUMENTS+=("--server" "letsencrypt")
 fi
 
 
 # Set custom keylength argument
 if bashio::config.has_value 'keylength'; then
     bashio::log.info "Requesting certificate key length of: '$KEYLENGTH'"
-    ACME_CERTIFICATE_ARGUMENTS+=(--keylength $KEYLENGTH)
+    ACME_CERTIFICATE_ARGUMENTS+=("--keylength" "${KEYLENGTH}")
 fi
 
 
 # Set custom expiration date argument
 if bashio::config.has_value 'valid_to'; then
     bashio::log.info "Requesting certificate expiration date of: '$VALID_TO'"
-    ACME_CERTIFICATE_ARGUMENTS+=(--valid-to "$VALID_TO")
+    ACME_CERTIFICATE_ARGUMENTS+=("--valid-to" "${VALID_TO}")
 fi
 
 
