@@ -11,7 +11,6 @@ KEYLENGTH=$(bashio::config 'keylength')
 VALID_TO=$(bashio::config 'valid_to')
 DNS_PROVIDER=$(bashio::config 'dns.provider')
 DNS_ENVS=$(bashio::config 'dns.env')
-DEBUG=$(bashio::config 'debug')
 
 ACME_ARGUMENTS=()
 ACME_SERVER_ARGUMENTS=()
@@ -19,7 +18,7 @@ DOMAIN_ARGUMENTS=()
 ACME_CERTIFICATE_ARGUMENTS=()
 
 # Set debug argument
-if [ "${DEBUG}" == "true" ]; then
+if bashio::config.true 'debug'; then
     ACME_ARGUMENTS+=(--debug)
 fi
 
@@ -46,21 +45,21 @@ fi
 
 
 # Set domain arguments
-if [ -z ${DOMAINS[@]} ]; then
-    bashio::log.error "No domains were configured"
-    exit 1
-else
+if bashio::config.has_value 'domains'; then
     for domain in $DOMAINS; do
         DOMAIN_ARGUMENTS+=(-d "$domain")
     done
+else
+    bashio::log.error "No domains were configured"
+    exit 1
 fi
 
 
 # Set server arguments
-if [ -n "$SERVER" ] && [ "$SERVER" != "null"]; then
-    bashio::log.info "Using custom acme server: '$SERVER'"
+if bashio::config.has_value 'server'; then
+    bashio::log.info "Using acme server: '$SERVER'"
     ACME_SERVER_ARGUMENTS="--server \"${SERVER}\""
-    if [ -n "$SERVER_ROOTCA" ] && [ "$SERVER_ROOTCA" != "null" ]; then
+    if bashio::config.has_value 'server_rootca'; then
         bashio::log.info "Using custom root CA: \n$SERVER_ROOTCA"
         echo "${SERVER_ROOTCA}" > /tmp/root-ca-cert.crt
         ACME_SERVER_ARGUMENTS+=(--ca-bundle "/tmp/root-ca-cert.crt")
@@ -72,14 +71,14 @@ fi
 
 
 # Set custom keylength argument
-if [ -n "$KEYLENGTH" ] && [ "$KEYLENGTH" != "null" ]; then
+if bashio::config.has_value 'keylength'; then
     bashio::log.info "Requesting certificate key length of: '$KEYLENGTH'"
     ACME_CERTIFICATE_ARGUMENTS+=(--keylength $KEYLENGTH)
 fi
 
 
 # Set custom expiration date argument
-if [ -n "$VALID_TO" ] && [ "$VALID_TO" != "null" ]; then
+if bashio::config.has_value 'valid_to'; then
     bashio::log.info "Requesting certificate expiration date of: '$VALID_TO'"
     ACME_CERTIFICATE_ARGUMENTS+=(--valid-to "$VALID_TO")
 fi
