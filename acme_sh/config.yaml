@@ -31,6 +31,7 @@ schema:
   keyfile: str
   challenge: list(dns|http|tls)
   keylength: list(2048|3072|4096|ec-256|ec-384|ec-521)?
+  valid_to: str?
   dns:
     provider: str?
     env:
