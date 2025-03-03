@@ -1,5 +1,5 @@
 ---
-version: 3.0.7
+version: 3.0.8
 slug: acme_sh2
 name: ACME.sh Certs
 description: Request certificates using ACME.sh
@@ -15,6 +15,9 @@ boot: manual
 init: false
 map:
   - ssl:rw
+ports:
+  80/tcp: 80
+  443/tcp: 443
 options:
   server: https://acme-v02.api.letsencrypt.org/directory
   certfile: fullchain.pem
